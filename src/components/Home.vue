@@ -1,10 +1,5 @@
 <template>
-    <!-- <parallax-container>
-      <parallax-element class="background" :parallaxStrength="-10" :type="'depth'">
-        <h2>'depth'</h2>
-      </parallax-element>
-    </parallax-container> -->
-  <div style="position: relative; z-index: 2; background-color: #000;">
+  <div style="position: relative; z-index: 2; background-color: #000; height: 100vh;">
     <parallax>
       <div class="foo" style="position: absolute; z-index: 3; color:#fff; font-size:40px;"> foo</div>
       <div class="bar" style="position: absolute; z-index: 3; color:#fff; font-size:40px; top: 50px;"> Bar </div>
