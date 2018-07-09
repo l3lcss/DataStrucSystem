@@ -11,6 +11,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "materialize-css": "^1.0.0-rc.2",
     "scrollreveal": "^3.4.0",
     "vue": "^2.5.2",
     "vue-mouse-parallax": "^0.9.2",
