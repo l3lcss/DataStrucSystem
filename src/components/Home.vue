@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative; z-index: 2; background-color: #000; height: 100vh;">
-    <div class="glitch load" data-text="BLACKPINK" style="color:white;">BLACKPINK</div>
     <parallax>
+      <div class="glitch load" data-text="BLACKPINK" style="color:white;">BLACKPINK</div>
       <div class="row">
         <div class="col s2"/>
         <div class="input-field col s8 load">

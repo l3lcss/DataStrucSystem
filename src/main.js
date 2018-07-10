@@ -4,7 +4,10 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueMouseParallax from 'vue-mouse-parallax'
+import Buefy from 'buefy'
+import 'buefy/lib/buefy.css'
 
+Vue.use(Buefy)
 Vue.use(VueMouseParallax)
 Vue.config.productionTip = false
 

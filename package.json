@@ -11,6 +11,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "buefy": "^0.6.6",
     "materialize-css": "^1.0.0-rc.2",
     "npm": "^6.1.0",
     "scrollreveal": "^3.4.0",
