@@ -56,6 +56,7 @@ export default {
 </script>
 
 <style>
+@import '../css/style_animate_text.css';
 #username, #password {
   color:aliceblue;
 }
