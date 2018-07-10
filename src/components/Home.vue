@@ -1,5 +1,6 @@
 <template>
   <div style="position: relative; z-index: 2; background-color: #000; height: 100vh;">
+    <div class="glitch load" data-text="BLACKPINK" style="color:white;">BLACKPINK</div>
     <parallax>
       <div class="row">
         <div class="col s2"/>
@@ -7,6 +8,7 @@
           <input type="text" id="username" autocomplete="off">
           <label for="username">USERNAME</label>
         </div>
+
         <div class="col s2"/>
       </div>
       <div class="row">
@@ -54,7 +56,17 @@ export default {
 </script>
 
 <style>
-#username, #password{
+@import '../css/style.css';
+#username, #password {
   color:aliceblue;
+}
+.btn {
+  background-color: #c9788c;
+  color: black;
+  font-weight: bold;
+}
+.btn:hover, .btn:focus {
+  background-color: rgb(52, 42, 42);
+  color: #c9788c;
 }
 </style>
