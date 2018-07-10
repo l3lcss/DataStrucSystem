@@ -6,9 +6,7 @@ import router from './router'
 import VueMouseParallax from 'vue-mouse-parallax'
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
-import styleAnimateText from './css/style_animate_text.css'
 
-Vue.use(styleAnimateText)
 Vue.use(Buefy)
 Vue.use(VueMouseParallax)
 Vue.config.productionTip = false
