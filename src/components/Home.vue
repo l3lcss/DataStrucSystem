@@ -1,6 +1,7 @@
 <template>
   <div style="position: relative; z-index: 2; background-color: #000; height: 100vh;">
     <parallax>
+      <b-loading :is-full-page="true" :active.sync="isLoading"></b-loading>
       <div class="glitch load" data-text="BLACKPINK" style="color:white;">BLACKPINK</div>
       <div class="row">
         <div class="col s2"/>
@@ -22,11 +23,14 @@
       <div class="row">
         <div class="col s2"/>
         <div class="col s2 load">
-          <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+          <button class="btn waves-effect waves-light" type="submit" name="action" @click="checkFirstLogin()" >Submit
             <i class="material-icons right">send</i>
           </button>
         </div>
         <div class="col s2"/>
+      </div>
+      <div style="color:white;">
+        {{ studentDetails }}
       </div>
     </parallax>
   </div>
@@ -35,11 +39,13 @@
 <script>
 import Parallax from 'vue-parallaxy'
 import ScrollReveal from 'scrollreveal'
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'Home',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      isLoading: false
     }
   },
   mounted () {
@@ -51,6 +57,21 @@ export default {
   },
   components: {
     Parallax
+  },
+  methods: {
+    ...mapActions([
+      'getstudentDetails'
+    ]),
+    async checkFirstLogin () {
+      this.isLoading = true
+      await this.getstudentDetails()
+      this.isLoading = false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      studentDetails: 'getstudentDetails'
+    })
   }
 }
 </script>
