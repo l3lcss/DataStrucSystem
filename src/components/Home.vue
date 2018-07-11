@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative; z-index: 2; background-color: #000; height: 100vh;">
-    <parallax>
+    <parallax style="height: 100vh;">
       <b-loading :is-full-page="true" :active.sync="isLoading"></b-loading>
       <div class="glitch load" data-text="BLACKPINK" style="color:white;">BLACKPINK</div>
       <div class="row">
