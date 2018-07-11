@@ -5,12 +5,17 @@ const cloudFunctionClient = axios.create({
 })
 
 export default {
-  async getstudentDetails () {
-    let data = []
-    await cloudFunctionClient.get('/getstudentDetails')
-      .then(function (response) {
-        data = response.data.data.students
-      })
+  async getstudentDetails (id) {
+    let data = {}
+    await cloudFunctionClient.get('/getstudentDetails', {
+      params: {
+        id
+      }
+    }).then((response) => {
+      data = response.data.data.resStudentList
+    }).catch((err) => {
+      console.log('err = ', err)
+    })
     return data
   }
 }

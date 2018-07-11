@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col s2"/>
         <div class="input-field col s8 load">
-          <input type="text" id="username" autocomplete="off">
+          <input type="text" id="username" autocomplete="off" v-model="studentID">
           <label for="username">USERNAME</label>
         </div>
 
@@ -30,6 +30,7 @@
         <div class="col s2"/>
       </div>
       <div style="color:white;">
+        student ID = {{ studentID }} <br>
         {{ studentDetails }}
       </div>
     </parallax>
@@ -45,7 +46,8 @@ export default {
   name: 'Home',
   data () {
     return {
-      isLoading: false
+      isLoading: false,
+      studentID: ''
     }
   },
   mounted () {
@@ -64,7 +66,23 @@ export default {
     ]),
     async checkFirstLogin () {
       this.isLoading = true
-      await this.getstudentDetails()
+      await this.getstudentDetails(this.studentID)
+      console.log('==> ', this.studentDetails)
+      if (this.studentDetails === undefined) {
+        this.$toast.open({
+          duration: 5000,
+          message: `รหัสนักศึกษาไม่ถูกต้อง`,
+          position: 'is-top-right',
+          type: 'is-danger'
+        })
+      } else if (Object.keys(this.studentDetails).length === 0) {
+        this.$toast.open({
+          duration: 5000,
+          message: `ระบุรหัสนักศึกษา`,
+          position: 'is-top-right',
+          type: 'is-danger'
+        })
+      }
       this.isLoading = false
     }
   },
