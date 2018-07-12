@@ -13,7 +13,6 @@
   "dependencies": {
     "axios": "^0.18.0",
     "buefy": "^0.6.6",
-    "materialize-css": "^1.0.0-rc.2",
     "npm": "^6.1.0",
     "scrollreveal": "^3.4.0",
     "vue": "^2.5.2",

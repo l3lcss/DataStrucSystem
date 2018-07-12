@@ -2,38 +2,48 @@
   <div style="position: relative; z-index: 2; background-color: #000; height: 100vh;">
     <parallax style="height: 100vh;">
       <b-loading :is-full-page="true" :active.sync="isLoading"></b-loading>
-      <div class="glitch load" data-text="BLACKPINK" style="color:white;">BLACKPINK</div>
-      <div class="row">
-        <div class="col s2"/>
-        <div class="input-field col s8 load">
-          <input type="text" id="username" autocomplete="off" v-model="studentID">
-          <label for="username">USERNAME</label>
+      <div class="glitch load is-mobile" data-text="BLACKPINK" style="color:white;margin-bottom:5vh;">BLACKPINK</div>
+      <div class="columns is-centered is-mobile">
+        <div class="column is-8 load">
+          <b-field>
+            <b-input placeholder="USERNAME"
+                icon="account"
+                autocomplete="off"
+                v-model="studentID">
+            </b-input>
+          </b-field>
         </div>
-
-        <div class="col s2"/>
       </div>
-      <div class="row">
-        <div class="col s2"/>
-        <div class="input-field col s8 load">
-          <input type="password" id="password" autocomplete="off">
-          <label for="password">PASSWORD</label>
+      <div class="columns is-centered is-mobile">
+        <div class="column is-8 load">
+          <b-field>
+            <b-input placeholder="PASSWORD"
+              type="password"
+              pack="fas"
+              icon="lock-open"
+              autocomplete="off"
+              password-reveal>
+            </b-input>
+          </b-field>
         </div>
-        <div class="col s2"/>
       </div>
-      <div class="row">
-        <div class="col s2"/>
-        <div class="col s2 load">
-          <button class="btn waves-effect waves-light" type="submit" name="action" @click="checkFirstLogin()" >Submit
-            <i class="material-icons right">send</i>
-          </button>
+      <div class="columns is-centered is-mobile">
+        <div class="column is-8 load">
+          <a class="button is-medium" @click="checkFirstLogin()" id="btnLogin" >
+            <span class="icon">
+              <b-icon
+                icon="arrow-right-bold-box"
+                size="is-medium">
+            </b-icon>
+            </span>
+            <span>LOGIN</span>
+          </a>
         </div>
-        <div class="col s2"/>
-      </div>
-      <div style="color:white;">
-        student ID = {{ studentID }} <br>
-        {{ studentDetails }}
       </div>
     </parallax>
+    <b-modal :active.sync="isComponentModalActive">
+      <modal-form></modal-form>
+    </b-modal>
   </div>
 </template>
 
@@ -41,13 +51,15 @@
 import Parallax from 'vue-parallaxy'
 import ScrollReveal from 'scrollreveal'
 import { mapActions, mapGetters } from 'vuex'
+import ModalForm from './ModalForm'
 
 export default {
   name: 'Home',
   data () {
     return {
       isLoading: false,
-      studentID: ''
+      studentID: '',
+      isComponentModalActive: false
     }
   },
   mounted () {
@@ -58,7 +70,8 @@ export default {
     sr.reveal('.load', { delay: 0, origin: 'top' }, 200)
   },
   components: {
-    Parallax
+    Parallax,
+    ModalForm
   },
   methods: {
     ...mapActions([
@@ -67,7 +80,6 @@ export default {
     async checkFirstLogin () {
       this.isLoading = true
       await this.getstudentDetails(this.studentID)
-      console.log('==> ', this.studentDetails)
       if (this.studentDetails === undefined) {
         this.$toast.open({
           duration: 5000,
@@ -82,6 +94,12 @@ export default {
           position: 'is-top-right',
           type: 'is-danger'
         })
+      } else {
+        if (this.studentDetails.FIRST_LOGIN) {
+          this.isComponentModalActive = true
+        } else {
+          this.$router.push({ name: 'Dashboard' })
+        }
       }
       this.isLoading = false
     }
@@ -113,7 +131,7 @@ body {
 }
 
 .glitch {
-  font-size: 10vw;
+  font-size: 11vw;
   color: #c9788c;
   position: relative;
   left: 16.5vw;
@@ -273,6 +291,14 @@ body {
   overflow: hidden;
   clip: rect(0, 900px, 0, 0);
   animation: noise-anim-2 3s infinite linear alternate-reverse;
+}
+#btnLogin {
+  background-color: #c9788c;
+  border: none;
+}
+#btnLogin:hover {
+  transition: 0.3s all;
+  background-color: rgb(245, 189, 189);
 }
 
 </style>
