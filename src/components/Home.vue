@@ -298,7 +298,7 @@ body {
 }
 #btnLogin:hover {
   transition: 0.3s all;
-  background-color: rgb(245, 189, 189);
+  background-color: rgb(255, 167, 167);
 }
 
 </style>
