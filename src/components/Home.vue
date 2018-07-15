@@ -80,14 +80,16 @@ export default {
     async checkFirstLogin () {
       this.isLoading = true
       await this.getstudentDetails(this.studentID)
-      if (this.studentDetails === undefined) {
+      console.log('this.studentDetails')
+      console.log(this.studentDetails)
+      if (this.studentDetails.err === 'Request failed with status code 404') {
         this.$toast.open({
           duration: 5000,
           message: `รหัสนักศึกษาไม่ถูกต้อง`,
           position: 'is-top-right',
           type: 'is-danger'
         })
-      } else if (Object.keys(this.studentDetails).length === 0) {
+      } else if (this.studentDetails.err === 'Network Error') {
         this.$toast.open({
           duration: 5000,
           message: `ระบุรหัสนักศึกษา`,

@@ -12,10 +12,27 @@ export default {
         id
       }
     }).then((response) => {
-      data = response.data.data.resStudentList
+      data = response.data.data
+    }).catch((err) => {
+      console.log('err = ', err)
+      data = {
+        err: err.message
+      }
+    })
+    console.log('data before return')
+    console.log(data)
+    return data
+  },
+  async setPassword (id, pass) {
+    await cloudFunctionClient.get('/setPassword', {
+      params: {
+        id,
+        pass
+      }
+    }).then((response) => {
+      console.log('res = ', response)
     }).catch((err) => {
       console.log('err = ', err)
     })
-    return data
   }
 }

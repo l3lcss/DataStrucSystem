@@ -7,6 +7,7 @@
       <section class="modal-card-body">
         <b-field label="Password">
           <b-input
+            v-model="pass"
             type="password"
             password-reveal
             placeholder="Your password"
@@ -32,13 +33,25 @@
 </template>
 
 <script>
+import cloudFunction from '@/client/cloudFunction'
+import { mapGetters } from 'vuex'
 export default {
   name: 'ModalForm',
-  methods: {
-    setData () {
-      console.log('setData()')
-      // this.$parent.close()
+  data () {
+    return {
+      pass: ''
     }
+  },
+  methods: {
+    async setData () {
+      await cloudFunction.setPassword(this.studentDetails.studentID, this.pass)
+      this.$parent.close()
+    }
+  },
+  computed: {
+    ...mapGetters({
+      studentDetails: 'getstudentDetails'
+    })
   }
 }
 </script>
