@@ -80,8 +80,6 @@ export default {
     async checkFirstLogin () {
       this.isLoading = true
       await this.getstudentDetails(this.studentID)
-      console.log('this.studentDetails')
-      console.log(this.studentDetails)
       if (this.studentDetails.err === 'Request failed with status code 404') {
         this.$toast.open({
           duration: 5000,

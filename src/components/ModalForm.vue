@@ -17,6 +17,7 @@
 
         <b-field label="Re-Password">
           <b-input
+            v-model="re_pass"
             type="password"
             password-reveal
             placeholder="Your password"
@@ -39,13 +40,23 @@ export default {
   name: 'ModalForm',
   data () {
     return {
-      pass: ''
+      pass: '',
+      re_pass: ''
     }
   },
   methods: {
     async setData () {
-      await cloudFunction.setPassword(this.studentDetails.studentID, this.pass)
-      this.$parent.close()
+      if (this.pass === this.re_pass) {
+        await cloudFunction.setPassword(this.studentDetails.studentID, this.pass)
+        this.$parent.close()
+      } else {
+        this.$toast.open({
+          duration: 5000,
+          message: `รหัสผ่านไม่เหมือนกัน`,
+          position: 'is-top-right',
+          type: 'is-danger'
+        })
+      }
     }
   },
   computed: {
