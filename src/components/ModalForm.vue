@@ -48,6 +48,7 @@ export default {
     async setData () {
       if (this.pass === this.re_pass) {
         await cloudFunction.setPassword(this.studentDetails.studentID, this.pass)
+        await cloudFunction.setFirstLogin(this.studentDetails.studentID)
         this.$parent.close()
       } else {
         this.$toast.open({

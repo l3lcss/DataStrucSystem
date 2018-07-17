@@ -34,5 +34,16 @@ export default {
     }).catch((err) => {
       console.log('err = ', err)
     })
+  },
+  async setFirstLogin (id) {
+    await cloudFunctionClient.get('/setFirstLogin', {
+      params: {
+        id
+      }
+    }).then((response) => {
+      console.log('res = ', response)
+    }).catch((err) => {
+      console.log('err = ', err)
+    })
   }
 }
