@@ -81,19 +81,9 @@ export default {
       this.isLoading = true
       await this.getstudentDetails(this.studentID)
       if (this.studentDetails.err === 'Request failed with status code 404') {
-        this.$toast.open({
-          duration: 5000,
-          message: `รหัสนักศึกษาไม่ถูกต้อง`,
-          position: 'is-top-right',
-          type: 'is-danger'
-        })
+        this.$alertError('รหัสนักศึกษาไม่ถูกต้อง')
       } else if (this.studentDetails.err === 'Network Error') {
-        this.$toast.open({
-          duration: 5000,
-          message: `ระบุรหัสนักศึกษา`,
-          position: 'is-top-right',
-          type: 'is-danger'
-        })
+        this.$alertError('ระบุรหัสนักศึกษา')
       } else {
         if (this.studentDetails.FIRST_LOGIN) {
           this.isComponentModalActive = true

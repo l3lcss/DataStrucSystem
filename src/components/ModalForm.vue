@@ -51,12 +51,7 @@ export default {
         await cloudFunction.setFirstLogin(this.studentDetails.studentID)
         this.$parent.close()
       } else {
-        this.$toast.open({
-          duration: 5000,
-          message: `รหัสผ่านไม่เหมือนกัน`,
-          position: 'is-top-right',
-          type: 'is-danger'
-        })
+        this.$alertError('รหัสผ่านไม่เหมือนกัน')
       }
     }
   },

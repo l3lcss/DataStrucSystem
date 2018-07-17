@@ -12,6 +12,15 @@ Vue.use(Buefy)
 Vue.use(VueMouseParallax)
 Vue.config.productionTip = false
 
+Vue.prototype.$alertError = (message) => {
+  Vue.prototype.$toast.open({
+    duration: 5000,
+    message,
+    position: 'is-top-right',
+    type: 'is-danger'
+  })
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
