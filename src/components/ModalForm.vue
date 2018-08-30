@@ -27,15 +27,14 @@
       </section>
       <footer class="modal-card-foot">
         <button class="button" type="button" @click="$parent.close()">Close</button>
-        <button class="button is-primary" @click="setData()">Confirm</button>
+        <button class="button is-primary" @click="setPass()">Confirm</button>
       </footer>
     </div>
   </div>
 </template>
 
 <script>
-import cloudFunction from '@/client/cloudFunction'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ModalForm',
   data () {
@@ -45,20 +44,26 @@ export default {
     }
   },
   methods: {
-    async setData () {
-      if (this.pass === this.re_pass) {
-        await cloudFunction.setPassword(this.studentDetails.studentID, this.pass)
-        await cloudFunction.setFirstLogin(this.studentDetails.studentID)
+    ...mapActions([
+      'setPassword'
+    ]),
+    async setPass () {
+      if (this.pass === this.re_pass && this.pass && this.re_pass) {
+        const params = {
+          id: this.getStudentDetails.id,
+          pass: this.pass
+        }
+        this.setPassword(params)
         this.$parent.close()
       } else {
-        this.$alertError('รหัสผ่านไม่เหมือนกัน')
+        this.$alert('รหัสผ่านไม่เหมือนกัน หรือยังไม่ได้กรอกรหัสผ่าน!!', 'is-danger')
       }
     }
   },
   computed: {
-    ...mapGetters({
-      studentDetails: 'getstudentDetails'
-    })
+    ...mapGetters([
+      'getStudentDetails'
+    ])
   }
 }
 </script>

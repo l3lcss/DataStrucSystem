@@ -22,6 +22,7 @@
               pack="fas"
               icon="lock-open"
               autocomplete="off"
+              v-model="password"
               password-reveal>
             </b-input>
           </b-field>
@@ -29,7 +30,7 @@
       </div>
       <div class="columns is-centered is-mobile">
         <div class="column is-8 load">
-          <a class="button is-medium" @click="checkFirstLogin()" id="btnLogin" >
+          <a class="button is-medium" @click="Login()" id="btnLogin" >
             <span class="icon">
               <b-icon
                 icon="arrow-right-bold-box"
@@ -50,7 +51,7 @@
 <script>
 import Parallax from 'vue-parallaxy'
 import ScrollReveal from 'scrollreveal'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import ModalForm from './ModalForm'
 
 export default {
@@ -59,6 +60,7 @@ export default {
     return {
       isLoading: false,
       studentID: '',
+      password: '',
       isComponentModalActive: false
     }
   },
@@ -75,29 +77,27 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getstudentDetails'
+      'verifyUserLogin'
     ]),
-    async checkFirstLogin () {
+    async Login () {
       this.isLoading = true
-      await this.getstudentDetails(this.studentID)
-      if (this.studentDetails.err === 'Request failed with status code 404') {
-        this.$alertError('รหัสนักศึกษาไม่ถูกต้อง')
-      } else if (this.studentDetails.err === 'Network Error') {
-        this.$alertError('ระบุรหัสนักศึกษา')
-      } else {
-        if (this.studentDetails.FIRST_LOGIN) {
+      if (this.studentID) {
+        const params = {
+          id: this.studentID,
+          pass: this.password
+        }
+        const res = await this.verifyUserLogin(params)
+        if (res.success && res.data.FIRST_LOGIN) {
           this.isComponentModalActive = true
-        } else {
+        } else if (res.success) {
+          this.$alert(res.message, 'is-success')
           this.$router.push({ name: 'Dashboard' })
+        } else {
+          this.$alert(res.message, 'is-danger')
         }
       }
       this.isLoading = false
     }
-  },
-  computed: {
-    ...mapGetters({
-      studentDetails: 'getstudentDetails'
-    })
   }
 }
 </script>

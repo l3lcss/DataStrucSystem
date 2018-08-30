@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import checkFirstLogin from './modules/checkFirstLogin'
+import user from './modules/user'
 
 Vue.use(Vuex)
 
 const store = () => {
   return new Vuex.Store({
     modules: {
-      checkFirstLogin
+      user
     }
   })
 }
