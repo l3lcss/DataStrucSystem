@@ -1,49 +1,37 @@
 import axios from 'axios'
 
 const cloudFunctionClient = axios.create({
-  baseURL: 'https://us-central1-vuex-firebase-58fb5.cloudfunctions.net/app/'
+  baseURL: 'https://us-central1-vuex-firebase-58fb5.cloudfunctions.net/app/',
+  timeout: 10000,
+  headers: { 'Authorization': 'iUYU4l60Ai3ZU2KtTL13wvsGwjKUVEIU' }
 })
 
 export default {
-  async getstudentDetails (id) {
-    let data = {}
-    await cloudFunctionClient.get('/getstudentDetails', {
-      params: {
-        id
-      }
-    }).then((response) => {
-      data = response.data.data
-    }).catch((err) => {
-      console.log('err = ', err)
-      data = {
-        err: err.message
-      }
-    })
-    console.log('data before return')
-    console.log(data)
-    return data
+  async verifyUserLogin (params) {
+    try {
+      const { data: { results } } = await cloudFunctionClient.get('/verifyUserLogin', {
+        params: {
+          id: params.id,
+          pass: params.pass
+        }
+      })
+      return results
+    } catch (error) {
+      console.log(error)
+      return error
+    }
   },
-  async setPassword (id, pass) {
-    await cloudFunctionClient.get('/setPassword', {
-      params: {
-        id,
-        pass
-      }
-    }).then((response) => {
-      console.log('res = ', response)
-    }).catch((err) => {
-      console.log('err = ', err)
-    })
-  },
-  async setFirstLogin (id) {
-    await cloudFunctionClient.get('/setFirstLogin', {
-      params: {
-        id
-      }
-    }).then((response) => {
-      console.log('res = ', response)
-    }).catch((err) => {
-      console.log('err = ', err)
-    })
+  async setPassword (params) {
+    try {
+      await cloudFunctionClient.post('/setPassword', {}, {
+        data: {
+          id: params.id,
+          pass: params.pass
+        }
+      })
+    } catch (error) {
+      console.log(error)
+      return error
+    }
   }
 }

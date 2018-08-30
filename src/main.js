@@ -12,12 +12,13 @@ Vue.use(Buefy)
 Vue.use(VueMouseParallax)
 Vue.config.productionTip = false
 
-Vue.prototype.$alertError = (message) => {
+Vue.prototype.$alert = (message, type) => {
   Vue.prototype.$toast.open({
-    duration: 5000,
+    queue: false,
+    duration: 3000,
     message,
     position: 'is-top-right',
-    type: 'is-danger'
+    type
   })
 }
 
