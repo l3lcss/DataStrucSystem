@@ -15,6 +15,14 @@ const actions = {
   },
   async fetchAllStudents ({ commit }) {
     commit('SET_ALL_STUDENT', await cloudFunction.getAllStudents())
+  },
+  async createStudent ({ commit }, params) {
+    let res = await cloudFunction.createStudent(params)
+    return res
+  },
+  async removeStudent ({ commit }, params) {
+    let res = await cloudFunction.removeStudent(params)
+    return res.success
   }
 }
 const mutations = {

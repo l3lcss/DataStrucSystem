@@ -43,7 +43,7 @@
       </div>
     </parallax>
     <b-modal :active.sync="isComponentModalActive">
-      <modal-form></modal-form>
+      <modal-set-pass />
     </b-modal>
   </div>
 </template>
@@ -52,7 +52,7 @@
 import Parallax from 'vue-parallaxy'
 import ScrollReveal from 'scrollreveal'
 import { mapActions } from 'vuex'
-import ModalForm from './ModalForm'
+import ModalSetPass from './ModalSetPass'
 
 export default {
   name: 'Home',
@@ -73,7 +73,7 @@ export default {
   },
   components: {
     Parallax,
-    ModalForm
+    ModalSetPass
   },
   methods: {
     ...mapActions([
@@ -89,7 +89,7 @@ export default {
         const res = await this.verifyUserLogin(params)
         if (res.success && res.data.FIRST_LOGIN) {
           this.isComponentModalActive = true
-        } else if (res.data.name === 'admin') {
+        } else if (res.success && res.data.identity === 'Admin') {
           this.$alert(res.message, 'is-success')
           this.$router.push({ name: 'Admin' })
         } else if (res.success) {

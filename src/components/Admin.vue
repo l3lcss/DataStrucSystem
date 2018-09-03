@@ -11,6 +11,7 @@
           <b-table
             :data="getAllStudents"
             :paginated="isPaginated"
+            :loading="isLoading"
             :per-page="perPage"
             :current-page.sync="currentPage"
             :pagination-simple="isPaginationSimple"
@@ -19,7 +20,6 @@
             class="load"
           >
             <template slot-scope="props">
-              <b-loading :is-full-page="true" :active.sync="isLoading"></b-loading>
               <b-table-column field="id" label="id" sortable centered>
                 {{ props.row.ID }}
               </b-table-column>
@@ -29,6 +29,9 @@
               <b-table-column field="password" label="password" sortable centered>
                 {{ props.row.password }}
               </b-table-column>
+              <b-table-column field="identity" label="identity" sortable centered>
+                {{ props.row.identity }}
+              </b-table-column>
               <b-table-column centered>
                 <div class="button is-danger is-small" @click="confirmCustomDelete(props.row.ID)">Delete</div>
               </b-table-column>
@@ -37,12 +40,23 @@
         </div>
       </div>
     </div>
+    <fab
+      :position="position"
+      :bg-color="bgColor"
+      :actions="fabActions"
+      @add="add"
+    ></fab>
+    <b-modal :active.sync="isComponentModalActive">
+      <modal-create-user />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import ScrollReveal from 'scrollreveal'
 import { mapActions, mapGetters } from 'vuex'
+import fab from 'vue-fab'
+import ModalCreateUser from './ModalCreateUser'
 export default {
   name: 'Admin',
   data () {
@@ -53,12 +67,27 @@ export default {
       defaultSortDirection: 'asc',
       currentPage: 1,
       perPage: 10,
-      isStriped: true
+      isStriped: true,
+      bgColor: '#c9788c',
+      position: 'button-right',
+      mainIcon: 'add_circle',
+      fabActions: [
+        {
+          name: 'add',
+          icon: 'add_circle_outline'
+        }
+      ],
+      isComponentModalActive: false
     }
+  },
+  components: {
+    fab,
+    ModalCreateUser
   },
   methods: {
     ...mapActions([
-      'fetchAllStudents'
+      'fetchAllStudents',
+      'removeStudent'
     ]),
     confirmCustomDelete (ID) {
       this.$dialog.confirm({
@@ -67,13 +96,19 @@ export default {
         confirmText: 'Delete Account',
         type: 'is-danger',
         hasIcon: true,
-        onConfirm: () => {
-          this.removeStudent(ID)
+        onConfirm: async () => {
+          this.isLoading = true
+          if (await this.removeStudent(ID)) {
+            this.$alert('remove successful.', 'is-success')
+          }
+          await this.fetchAllStudents()
+          this.isLoading = false
         }
       })
     },
     add () {
       console.log('add')
+      this.isComponentModalActive = true
     }
   },
   computed: {
@@ -99,10 +134,7 @@ export default {
   background-color: rgba(255, 255, 255, 0.3);
   color: rgb(247, 165, 203);
 }
-.addBtn {
-  bottom: 0;
-  position: fixed;
-  margin: 1em;
-  right: 0px;
+.pagination-link{
+  color: red !important;
 }
 </style>

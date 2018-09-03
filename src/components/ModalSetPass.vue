@@ -36,7 +36,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'ModalForm',
+  name: 'ModalSetPass',
   data () {
     return {
       pass: '',
