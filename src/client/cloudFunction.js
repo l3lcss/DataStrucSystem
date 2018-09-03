@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const cloudFunctionClient = axios.create({
-  baseURL: 'http://localhost:5000/vuex-firebase-58fb5/us-central1/app/',
+  baseURL: 'https://us-central1-vuex-firebase-58fb5.cloudfunctions.net/app',
   timeout: 10000,
   headers: { 'Authorization': 'iUYU4l60Ai3ZU2KtTL13wvsGwjKUVEIU' }
 })
