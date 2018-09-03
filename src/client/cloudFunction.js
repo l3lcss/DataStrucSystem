@@ -33,5 +33,14 @@ export default {
       console.log(error)
       return error
     }
+  },
+  async getAllStudents () {
+    try {
+      let { data: { results: { data: { students } } } } = await cloudFunctionClient.get('/getAllStudents')
+      return students
+    } catch (error) {
+      console.log(error)
+      return error
+    }
   }
 }
