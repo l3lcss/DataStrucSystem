@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; z-index: 2; background-color: #000; height: 100vh;">
+  <div style="position: relative; z-index: 2;">
     <parallax style="height: 100vh;">
       <b-loading :is-full-page="true" :active.sync="isLoading"></b-loading>
       <div class="glitch load is-mobile" data-text="BLACKPINK" style="color:white;margin-bottom:5vh;">BLACKPINK</div>
@@ -89,6 +89,9 @@ export default {
         const res = await this.verifyUserLogin(params)
         if (res.success && res.data.FIRST_LOGIN) {
           this.isComponentModalActive = true
+        } else if (res.data.name === 'admin') {
+          this.$alert(res.message, 'is-success')
+          this.$router.push({ name: 'Admin' })
         } else if (res.success) {
           this.$alert(res.message, 'is-success')
           this.$router.push({ name: 'Dashboard' })
