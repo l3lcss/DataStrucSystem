@@ -27,6 +27,10 @@ const actions = {
   },
   async setCurrentTA ({ commit }, params) {
     commit('SET_CURRENT_TA', params)
+  },
+  async getUserDetails ({ commit }, params) {
+    let res = await cloudFunction.getUserDetails(params)
+    return res
   }
 }
 const mutations = {

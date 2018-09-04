@@ -7,7 +7,9 @@ import VueMouseParallax from 'vue-mouse-parallax'
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
 import store from './store'
+import VueCarousel from 'vue-carousel'
 
+Vue.use(VueCarousel)
 Vue.use(Buefy)
 Vue.use(VueMouseParallax)
 Vue.config.productionTip = false

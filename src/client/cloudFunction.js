@@ -2,11 +2,24 @@ import axios from 'axios'
 
 const cloudFunctionClient = axios.create({
   baseURL: 'https://us-central1-vuex-firebase-58fb5.cloudfunctions.net/app',
-  timeout: 10000,
+  timeout: 30000,
   headers: { 'Authorization': 'iUYU4l60Ai3ZU2KtTL13wvsGwjKUVEIU' }
 })
 
 export default {
+  async getUserDetails (params) {
+    try {
+      const { data: { results } } = await cloudFunctionClient.get('/getUserDetails', {
+        params: {
+          id: params
+        }
+      })
+      return results
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  },
   async verifyUserLogin (params) {
     try {
       const { data: { results } } = await cloudFunctionClient.get('/verifyUserLogin', {
