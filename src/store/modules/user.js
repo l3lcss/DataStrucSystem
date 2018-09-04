@@ -2,7 +2,8 @@ import cloudFunction from '@/client/cloudFunction'
 
 const state = {
   studentDetails: {},
-  students: []
+  students: [],
+  currentTA: ''
 }
 const actions = {
   async verifyUserLogin ({ commit }, params) {
@@ -23,6 +24,9 @@ const actions = {
   async removeStudent ({ commit }, params) {
     let res = await cloudFunction.removeStudent(params)
     return res.success
+  },
+  async setCurrentTA ({ commit }, params) {
+    commit('SET_CURRENT_TA', params)
   }
 }
 const mutations = {
@@ -31,11 +35,15 @@ const mutations = {
   },
   SET_ALL_STUDENT: (state, payload) => {
     state.students = payload
+  },
+  SET_CURRENT_TA: (state, payload) => {
+    state.currentTA = payload
   }
 }
 const getters = {
   getStudentDetails: (state) => state.studentDetails,
-  getAllStudents: (state) => state.students
+  getAllStudents: (state) => state.students,
+  getCurrentTA: (state) => state.students.find((std) => std.ID === state.currentTA)
 }
 export default {
   state,
