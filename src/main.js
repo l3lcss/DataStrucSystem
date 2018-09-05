@@ -24,6 +24,14 @@ Vue.prototype.$alert = (message, type) => {
   })
 }
 
+Vue.prototype.$dialogAlert = (type, title, message) => {
+  Vue.prototype.$dialog.confirm({
+    type,
+    title,
+    message
+  })
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

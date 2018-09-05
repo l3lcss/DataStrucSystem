@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="columns is-mobile is-centered">
-      <div class="column is-8 load">
+      <div class="column is-12 load">
         <carousel :perPage="1" paginationActiveColor="#c9788c" paginationColor="#fff">
           <slide>
             <TA1 />
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { Carousel, Slide } from 'vue-carousel'
 import TA1 from './TA1'
 import TA2 from './TA2'
@@ -39,6 +40,11 @@ export default {
       data: 'Dashboard Page'
     }
   },
+  computed: {
+    ...mapGetters([
+      'getStudentDetails'
+    ])
+  },
   components: {
     Carousel,
     Slide,
@@ -46,6 +52,9 @@ export default {
     TA2,
     TA3,
     TA4
+  },
+  mounted () {
+    console.log(this.getStudentDetails, 'this.getStudentDetails')
   }
 }
 </script>

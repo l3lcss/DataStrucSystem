@@ -83,5 +83,20 @@ export default {
       console.log(error)
       return error
     }
+  },
+  async setReservTime (params, studentID) {
+    try {
+      const { data: { results } } = await cloudFunctionClient.post('/setReservTime', {}, {
+        data: {
+          time: params.time,
+          TA: params.TA,
+          studentID: studentID.toString()
+        }
+      })
+      return results
+    } catch (error) {
+      console.log(error)
+      return error
+    }
   }
 }

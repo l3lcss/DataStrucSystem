@@ -31,6 +31,10 @@ const actions = {
   async getUserDetails ({ commit }, params) {
     let res = await cloudFunction.getUserDetails(params)
     return res
+  },
+  async setReservTime ({commit}, params) {
+    let res = await cloudFunction.setReservTime(params, state.studentDetails.ID)
+    return res
   }
 }
 const mutations = {

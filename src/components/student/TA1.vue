@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="columns is-centered">
-      <div class="column is-4" style="margin:auto;">
+      <div class="column is-4" style="margin: auto;">
         <img src="../../assets/ta.png">
       </div>
 
@@ -20,20 +20,34 @@
                 <td v-if="schedule.name">{{schedule.name}}</td>
                 <td v-else></td>
                 <td v-if="schedule.name">
-                  <div class="field">
-                    <b-switch
-                    type="is-success"
-                    disabled>
-                    </b-switch>
-                  </div>
+                  <b-field>
+                    <b-radio-button
+                      native-value="Disabled"
+                      disabled>
+                      Disabled
+                    </b-radio-button>
+                  </b-field>
                 </td>
                 <td v-else>
-                  <div class="field">
-                    <b-switch
-                    type="is-success"
-                    @input="reservEvent(schedule.time)">
-                    </b-switch>
-                  </div>
+                  <b-field>
+                    <b-radio-button
+                      v-model="schedule.nativeValue"
+                      native-value = 1
+                      type="is-success"
+                      @input="reservEventYes(schedule.time)">
+                      <b-icon icon="check"></b-icon>
+                      <span>Yes</span>
+                    </b-radio-button>
+
+                    <b-radio-button
+                      v-model="schedule.nativeValue"
+                      native-value = 0
+                      type="is-danger"
+                      @input="reservEventNo(schedule.time)">
+                      <b-icon icon="close"></b-icon>
+                      <span>No</span>
+                    </b-radio-button>
+                  </b-field>
                 </td>
               </tr>
             </tbody>
@@ -55,16 +69,31 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getUserDetails'
+      'getUserDetails',
+      'setReservTime'
     ]),
-    reservEvent (value) {
-      console.log('reserv', value)
+    reservEventYes (value) {
+      this.$dialog.confirm({
+        type: 'is-primary',
+        title: 'Infomation',
+        message: `ต้องการจองเวลา <strong>${value}</strong> ใช่หรือไม่`,
+        onConfirm: () => {
+          this.setReservTime({time: value, TA: '999'})
+        }
+      })
+    },
+    reservEventNo (value) {
+      console.log('reservEventNo', value)
     }
   },
   async mounted () {
     const res = await this.getUserDetails(999)
-    this.userDetails = res.data.schedules
-    console.log(this.userDetails, 'userDetails')
+    this.userDetails = res.data.schedules.map((time) => {
+      return {
+        ...time,
+        nativeValue: 0
+      }
+    })
   }
 }
 </script>
@@ -77,6 +106,12 @@ export default {
 }
 .table {
   font-family: 'Kanit', sans-serif;
+}
+th,td {
+   text-align:center;
+}
+.control {
+  text-align:center;
 }
 .tableHead {
   font-family: 'Kanit', sans-serif;
