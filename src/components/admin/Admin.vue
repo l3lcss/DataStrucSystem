@@ -9,7 +9,7 @@
       <div class="column is-10 load">
         <div style="width:90%;">
           <b-table
-            :data="getAllStudents"
+            :data="getAllUsers"
             :paginated="isPaginated"
             :loading="isLoading"
             :per-page="perPage"
@@ -101,23 +101,23 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchAllStudents',
-      'removeStudent',
+      'fetchAllUsers',
+      'removeUser',
       'setCurrentTA'
     ]),
     confirmCustomDelete (ID) {
       this.$dialog.confirm({
-        title: 'Deleting Student',
-        message: `Are you sure you want to <strong>delete</strong> this <br />Student: ID : <strong>${ID}</strong> ? This action cannot be undo.`,
+        title: 'Deleting User',
+        message: `Are you sure you want to <strong>delete</strong> this <br />User: ID : <strong>${ID}</strong> ? This action cannot be undo.`,
         confirmText: 'Delete Account',
         type: 'is-danger',
         hasIcon: true,
         onConfirm: async () => {
           this.isLoading = true
-          if (await this.removeStudent(ID)) {
+          if (await this.removeUser(ID)) {
             this.$alert('remove successful.', 'is-success')
           }
-          await this.fetchAllStudents()
+          await this.fetchAllUsers()
           this.isLoading = false
         }
       })
@@ -132,7 +132,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getAllStudents'
+      'getAllUsers'
     ])
   },
   async mounted () {
@@ -141,8 +141,8 @@ export default {
       delay: 200
     })
     sr.reveal('.load', { delay: 0, origin: 'top' }, 200)
-    await this.fetchAllStudents()
-    console.log(this.getAllStudents, 'this.getAllStudents')
+    await this.fetchAllUsers()
+    console.log(this.getAllUsers, 'this.getAllUsers')
   }
 }
 </script>

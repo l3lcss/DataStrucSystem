@@ -1,57 +1,61 @@
-import cloudFunction from '@/client/cloudFunction'
-
+import user from '@/resources/user'
 const state = {
-  studentDetails: {},
-  students: [],
+  userLogin: {},
+  allUsers: [],
   currentTA: ''
 }
 const actions = {
   async verifyUserLogin ({ commit }, params) {
-    const res = await cloudFunction.verifyUserLogin(params)
-    commit('SET_STUDENT_DETAILS', res.data)
-    return res
+    const { results } = await user.verifyUserLogin(params)
+    if (results.success) {
+      commit('SET_USER_LOGIN', results.data)
+    }
+    return results
   },
   async setPassword ({ commit }, params) {
-    await cloudFunction.setPassword(params)
+    await user.setPassword(params)
   },
-  async fetchAllStudents ({ commit }) {
-    commit('SET_ALL_STUDENT', await cloudFunction.getAllStudents())
+  async fetchAllUsers ({ commit }) {
+    commit('SET_ALL_USERS', await user.fetchAllUsers())
   },
-  async createStudent ({ commit }, params) {
-    let res = await cloudFunction.createStudent(params)
-    return res
+  async createUser ({ commit }, params) {
+    let { results } = await user.createUser(params)
+    return results
   },
-  async removeStudent ({ commit }, params) {
-    let res = await cloudFunction.removeStudent(params)
-    return res.success
+  async removeUser ({ commit }, params) {
+    let { success } = await user.removeUser(params)
+    return success
   },
   async setCurrentTA ({ commit }, params) {
     commit('SET_CURRENT_TA', params)
   },
-  async getUserDetails ({ commit }, params) {
-    let res = await cloudFunction.getUserDetails(params)
-    return res
+  async getUserDetails ({ commit }, ID) {
+    let results = await user.getUserDetails(ID)
+    return results
   },
   async setReservTime ({commit}, params) {
-    let res = await cloudFunction.setReservTime(params, state.studentDetails.ID)
-    return res
+    let newSchedule = await user.setReservTime(params, state.userLogin)
+    commit('SET_NEW_SCHEDULE', newSchedule)
   }
 }
 const mutations = {
-  SET_STUDENT_DETAILS: (state, payload) => {
-    state.studentDetails = payload
+  SET_USER_LOGIN: (state, payload) => {
+    state.userLogin = payload
   },
-  SET_ALL_STUDENT: (state, payload) => {
-    state.students = payload
+  SET_ALL_USERS: (state, payload) => {
+    state.allUsers = payload
   },
   SET_CURRENT_TA: (state, payload) => {
     state.currentTA = payload
+  },
+  SET_NEW_SCHEDULE: (state, payload) => {
+    state.userLogin.schedule = payload
   }
 }
 const getters = {
-  getStudentDetails: (state) => state.studentDetails,
-  getAllStudents: (state) => state.students,
-  getCurrentTA: (state) => state.students.find((std) => std.ID === state.currentTA)
+  getUserLogin: (state) => state.userLogin,
+  getAllUsers: (state) => state.allUsers,
+  getCurrentTA: (state) => state.allUsers.find((std) => std.ID === state.currentTA)
 }
 export default {
   state,

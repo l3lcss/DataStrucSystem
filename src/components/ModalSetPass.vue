@@ -50,10 +50,11 @@ export default {
     async setPass () {
       if (this.pass === this.re_pass && this.pass && this.re_pass) {
         const params = {
-          id: this.getStudentDetails.id,
+          id: this.getUserLogin.ID.toString(),
           pass: this.pass
         }
         this.setPassword(params)
+        this.$alert('set password successfully.', 'is-success')
         this.$parent.close()
       } else {
         this.$alert('รหัสผ่านไม่เหมือนกัน หรือยังไม่ได้กรอกรหัสผ่าน!!', 'is-danger')
@@ -62,7 +63,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getStudentDetails'
+      'getUserLogin'
     ])
   }
 }

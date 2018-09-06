@@ -25,7 +25,7 @@
         <b-field label="Identity">
           <b-select
             v-model="identity"
-            expanded="true"
+            :expanded = true
             placeholder="Identity"
             icon="user"
             icon-pack="fas">
@@ -52,23 +52,23 @@ export default {
       id: '',
       name: '',
       isLoading: false,
-      identity: ''
+      identity: null
     }
   },
   methods: {
     ...mapActions([
-      'createStudent',
-      'fetchAllStudents'
+      'createUser',
+      'fetchAllUsers'
     ]),
     async confirm () {
       this.isLoading = true
-      let res = await this.createStudent({ id: this.id, name: this.name, identity: this.identity })
-      if (!res.success) {
-        this.$alert(res.message, 'is-danger')
-      } else {
+      let res = await this.createUser({ id: this.id, name: this.name, identity: this.identity })
+      if (res.success) {
         this.$alert(res.message, 'is-success')
+      } else {
+        this.$alert(res.message, 'is-danger')
       }
-      await this.fetchAllStudents()
+      await this.fetchAllUsers()
       this.$parent.close()
       this.isLoading = false
     }

@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getStudentDetails'
+      'getUserLogin'
     ])
   },
   components: {
@@ -54,7 +54,7 @@ export default {
     TA4
   },
   mounted () {
-    console.log(this.getStudentDetails, 'this.getStudentDetails')
+    console.log(this.getUserLogin, 'this.getUserLogin')
   }
 }
 </script>

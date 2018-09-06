@@ -87,7 +87,7 @@ export default {
           pass: this.password
         }
         const res = await this.verifyUserLogin(params)
-        if (res.success && res.data.FIRST_LOGIN) {
+        if (res.data.FIRST_LOGIN) {
           this.isComponentModalActive = true
         } else if (res.success && res.data.identity === 'Admin') {
           this.$alert(res.message, 'is-success')

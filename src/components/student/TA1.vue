@@ -19,7 +19,7 @@
                 <th>{{schedule.time}}</th>
                 <td v-if="schedule.name">{{schedule.name}}</td>
                 <td v-else></td>
-                <td v-if="schedule.name">
+                <td v-if="schedule.ID && schedule.ID !== getUserLogin.ID">
                   <b-field>
                     <b-radio-button
                       native-value="Disabled"
@@ -32,7 +32,7 @@
                   <b-field>
                     <b-radio-button
                       v-model="schedule.nativeValue"
-                      native-value = 1
+                      :native-value="true"
                       type="is-success"
                       @input="reservEventYes(schedule.time)">
                       <b-icon icon="check"></b-icon>
@@ -41,7 +41,7 @@
 
                     <b-radio-button
                       v-model="schedule.nativeValue"
-                      native-value = 0
+                      :native-value="false"
                       type="is-danger"
                       @input="reservEventNo(schedule.time)">
                       <b-icon icon="close"></b-icon>
@@ -53,13 +53,14 @@
             </tbody>
           </table>
         </center>
+        {{ userDetails }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'TA1',
   data () {
@@ -77,23 +78,44 @@ export default {
         type: 'is-primary',
         title: 'Infomation',
         message: `ต้องการจองเวลา <strong>${value}</strong> ใช่หรือไม่`,
-        onConfirm: () => {
-          this.setReservTime({time: value, TA: '999'})
+        onConfirm: async () => {
+          await this.setReservTime({time: value, TA: '666'})
+          await this.initData()
         }
       })
     },
     reservEventNo (value) {
       console.log('reservEventNo', value)
+    },
+    async initData () {
+      const res = await this.getUserDetails('666')
+      const userLogin = await this.getUserLogin
+      console.log(userLogin, 'userLogin')
+      this.userDetails = res.schedules.map((time) => {
+        let schedules = {}
+        if (userLogin.hasOwnProperty('schedule') && userLogin.schedule.TA === '666' && userLogin.schedule.time === time.time) {
+          schedules = {
+            ...time,
+            nativeValue: true
+          }
+        } else {
+          schedules = {
+            ...time,
+            nativeValue: false
+          }
+        }
+        return schedules
+      })
+      console.log(this.userDetails, 'this.userDetails')
     }
   },
+  computed: {
+    ...mapGetters([
+      'getUserLogin'
+    ])
+  },
   async mounted () {
-    const res = await this.getUserDetails(999)
-    this.userDetails = res.data.schedules.map((time) => {
-      return {
-        ...time,
-        nativeValue: 0
-      }
-    })
+    await this.initData()
   }
 }
 </script>
