@@ -28,7 +28,7 @@
                     </b-radio-button>
                   </b-field>
                 </td>
-                <td v-else>
+                <td v-else-if="getUserLogin.schedule.TA === '666' && getUserLogin.schedule.time === schedule.time || getUserLogin.schedule.TA === ''">
                   <b-field>
                     <b-radio-button
                       v-model="schedule.nativeValue"
@@ -44,6 +44,27 @@
                       :native-value="false"
                       type="is-danger"
                       @input="reservEventNo(schedule.time)">
+                      <b-icon icon="close"></b-icon>
+                      <span>No</span>
+                    </b-radio-button>
+                  </b-field>
+                </td>
+                <td v-else>
+                  <b-field>
+                    <b-radio-button
+                      disabled
+                      v-model="schedule.nativeValue"
+                      :native-value="true"
+                      type="is-success">
+                      <b-icon icon="check"></b-icon>
+                      <span>Yes</span>
+                    </b-radio-button>
+
+                    <b-radio-button
+                      disabled
+                      v-model="schedule.nativeValue"
+                      :native-value="false"
+                      type="is-danger">
                       <b-icon icon="close"></b-icon>
                       <span>No</span>
                     </b-radio-button>
@@ -73,29 +94,15 @@ export default {
       'setReservTime',
       'setIsloadingDashboard'
     ]),
-    reservEventYes (value) {
-      this.$dialog.confirm({
-        type: 'is-primary',
-        title: 'Infomation',
-        message: `ต้องการจองเวลา <strong>${value}</strong> ใช่หรือไม่`,
-        onConfirm: async () => {
-          this.setIsloadingDashboard(true)
-          await this.setReservTime({time: value, TA: '666', status: true})
-          await this.initData()
-        }
-      })
+    async reservEventYes (value) {
+      this.setIsloadingDashboard(true)
+      await this.setReservTime({time: value, TA: '666', status: true})
+      await this.initData()
     },
-    reservEventNo (value) {
-      this.$dialog.confirm({
-        type: 'is-primary',
-        title: 'Infomation',
-        message: `ต้องการยกเลิกการจองเวลา <strong>${value}</strong> ใช่หรือไม่`,
-        onConfirm: async () => {
-          this.setIsloadingDashboard(true)
-          await this.setReservTime({time: value, TA: '666', status: false})
-          await this.initData()
-        }
-      })
+    async reservEventNo (value) {
+      this.setIsloadingDashboard(true)
+      await this.setReservTime({time: value, TA: '666', status: false})
+      await this.initData()
     },
     async initData () {
       this.setIsloadingDashboard(true)
