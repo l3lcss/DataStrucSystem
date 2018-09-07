@@ -1,5 +1,6 @@
 <template>
   <div>
+    <b-loading :is-full-page="true" :active.sync="getIsloadingDashboard"></b-loading>
     <div class="columns is-mobile is-centered header">
       <div class="column is-10 load is-size-5 has-text-weight-bold" style="color: #c9788c;">
         <div class="glitch load is-mobile" data-text="TITLE">TITLE</div>
@@ -42,7 +43,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getUserLogin'
+      'getUserLogin',
+      'getIsloadingDashboard'
     ])
   },
   components: {

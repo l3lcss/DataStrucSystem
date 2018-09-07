@@ -53,7 +53,6 @@
             </tbody>
           </table>
         </center>
-        {{ userDetails }}
       </div>
     </div>
   </div>
@@ -71,7 +70,8 @@ export default {
   methods: {
     ...mapActions([
       'getUserDetails',
-      'setReservTime'
+      'setReservTime',
+      'setIsloadingDashboard'
     ]),
     reservEventYes (value) {
       this.$dialog.confirm({
@@ -79,18 +79,28 @@ export default {
         title: 'Infomation',
         message: `ต้องการจองเวลา <strong>${value}</strong> ใช่หรือไม่`,
         onConfirm: async () => {
-          await this.setReservTime({time: value, TA: '666'})
+          this.setIsloadingDashboard(true)
+          await this.setReservTime({time: value, TA: '666', status: true})
           await this.initData()
         }
       })
     },
     reservEventNo (value) {
-      console.log('reservEventNo', value)
+      this.$dialog.confirm({
+        type: 'is-primary',
+        title: 'Infomation',
+        message: `ต้องการยกเลิกการจองเวลา <strong>${value}</strong> ใช่หรือไม่`,
+        onConfirm: async () => {
+          this.setIsloadingDashboard(true)
+          await this.setReservTime({time: value, TA: '666', status: false})
+          await this.initData()
+        }
+      })
     },
     async initData () {
+      this.setIsloadingDashboard(true)
       const res = await this.getUserDetails('666')
       const userLogin = await this.getUserLogin
-      console.log(userLogin, 'userLogin')
       this.userDetails = res.schedules.map((time) => {
         let schedules = {}
         if (userLogin.hasOwnProperty('schedule') && userLogin.schedule.TA === '666' && userLogin.schedule.time === time.time) {
@@ -106,7 +116,7 @@ export default {
         }
         return schedules
       })
-      console.log(this.userDetails, 'this.userDetails')
+      this.setIsloadingDashboard(false)
     }
   },
   computed: {

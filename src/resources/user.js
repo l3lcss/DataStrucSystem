@@ -116,29 +116,46 @@ export default {
     return data
   },
   async setReservTime (params, userLogin) {
-    await db.collection('member').doc(userLogin.ID.toString()).update({
-      schedule: {
+    const taRef = db.collection('member').doc(params.TA)
+    const taGet = await taRef.get()
+    let taData = taGet.data()
+    const index = taData.schedules.findIndex(obj => obj.time === params.time)
+
+    const stdRef = db.collection('member').doc(userLogin.ID.toString())
+
+    if (params.status) {
+      await stdRef.update({
+        schedule: {
+          TA: params.TA,
+          time: params.time
+        }
+      })
+      taData.schedules[index] = {
+        ID: userLogin.ID,
+        name: userLogin.name,
+        time: params.time
+      }
+
+      await taRef.update({schedules: taData.schedules})
+      return {
         TA: params.TA,
         time: params.time
       }
-    })
-    const taRef = await db.collection('member').doc(params.TA).get()
-    let taData = taRef.data()
-
-    console.log(taData, 'taData')
-    console.log(taData.schedules, 'taData.schedules')
-
-    let index = taData.schedules.findIndex(obj => obj.time === params.time)
-    taData.schedules[index] = {
-      ID: userLogin.ID,
-      name: userLogin.name,
-      time: params.time
-    }
-
-    await db.collection('member').doc(params.TA).update({schedules: taData.schedules})
-    return {
-      TA: params.TA,
-      time: params.time
+    } else {
+      taData.schedules[index] = {
+        time: params.time
+      }
+      taRef.update({schedules: taData.schedules})
+      stdRef.update({
+        schedule: {
+          TA: '',
+          time: ''
+        }
+      })
+      return {
+        TA: '',
+        time: ''
+      }
     }
   }
 }
