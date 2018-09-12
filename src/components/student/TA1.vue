@@ -28,7 +28,7 @@
                     </b-radio-button>
                   </b-field>
                 </td>
-                <td v-else-if="getUserLogin.schedule.TA === '666' && getUserLogin.schedule.time === schedule.time || getUserLogin.schedule.TA === ''">
+                <td v-else-if="getUserLogin.schedule.TA === '666' && getUserLogin.schedule.time === schedule.time || getUserLogin.schedule.TA === '' || getUserLogin.schedule">
                   <b-field>
                     <b-radio-button
                       v-model="schedule.nativeValue"
@@ -96,7 +96,10 @@ export default {
     ]),
     async reservEventYes (value) {
       this.setIsloadingDashboard(true)
-      await this.setReservTime({time: value, TA: '666', status: true})
+      let res = await this.setReservTime({time: value, TA: '666', status: true})
+      if (!res) {
+        this.$alert('Interrupt transaction.', 'is-danger')
+      }
       await this.initData()
     },
     async reservEventNo (value) {
@@ -110,7 +113,7 @@ export default {
       const userLogin = await this.getUserLogin
       this.userDetails = res.schedules.map((time) => {
         let schedules = {}
-        if (userLogin.hasOwnProperty('schedule') && userLogin.schedule.TA === '666' && userLogin.schedule.time === time.time) {
+        if (userLogin.hasOwnProperty('schedule') && userLogin.schedule.TA === '666' && userLogin.schedule.time === time.time && userLogin.ID === time.ID) {
           schedules = {
             ...time,
             nativeValue: true

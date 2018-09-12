@@ -142,7 +142,7 @@ export default {
   left: 2px;
   text-shadow: -1px 0 red;
   top: 0;
-  color: #c9788c;
+  color: #fff;
   background: black;
   overflow: hidden;
   clip: rect(0, 900px, 0, 0);
