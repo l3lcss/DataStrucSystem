@@ -36,6 +36,9 @@ const actions = {
   async setReservTime ({commit}, params) {
     let newSchedule = await user.setReservTime(params, state.userLogin)
     commit('SET_NEW_SCHEDULE', newSchedule)
+    if (newSchedule) {
+      return false
+    }
   }
 }
 const mutations = {

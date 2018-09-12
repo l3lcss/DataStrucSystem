@@ -117,45 +117,57 @@ export default {
   },
   async setReservTime (params, userLogin) {
     const taRef = db.collection('member').doc(params.TA)
-    const taGet = await taRef.get()
-    let taData = taGet.data()
-    const index = taData.schedules.findIndex(obj => obj.time === params.time)
+    let result = {}
+    await db.runTransaction((transaction) => {
+      return transaction.get(taRef).then(async (taDoc) => {
+        let taData = taDoc.data()
+        const index = taData.schedules.findIndex(obj => obj.time === params.time)
+        if (taData.schedules[index].ID) {
+          return Promise.reject(new Error('has student ID'))
+        }
 
-    const stdRef = db.collection('member').doc(userLogin.ID.toString())
+        const stdRef = db.collection('member').doc(userLogin.ID.toString())
+        if (params.status) {
+          await stdRef.update({
+            schedule: {
+              TA: params.TA,
+              time: params.time
+            }
+          })
+          taData.schedules[index] = {
+            ID: userLogin.ID,
+            name: userLogin.name,
+            time: params.time
+          }
 
-    if (params.status) {
-      await stdRef.update({
-        schedule: {
-          TA: params.TA,
-          time: params.time
+          await transaction.update(taRef, {schedules: taData.schedules})
+          result = {
+            TA: params.TA,
+            time: params.time
+          }
+        } else {
+          taData.schedules[index] = {
+            time: params.time
+          }
+          transaction.update(taRef, {schedules: taData.schedules})
+          stdRef.update({
+            schedule: {
+              TA: '',
+              time: ''
+            }
+          })
+          result = {
+            TA: '',
+            time: ''
+          }
         }
       })
-      taData.schedules[index] = {
-        ID: userLogin.ID,
-        name: userLogin.name,
-        time: params.time
-      }
-
-      await taRef.update({schedules: taData.schedules})
-      return {
-        TA: params.TA,
-        time: params.time
-      }
-    } else {
-      taData.schedules[index] = {
-        time: params.time
-      }
-      taRef.update({schedules: taData.schedules})
-      stdRef.update({
-        schedule: {
-          TA: '',
-          time: ''
-        }
-      })
-      return {
-        TA: '',
-        time: ''
-      }
-    }
+    }).then(() => {
+      console.log('transaction successful ')
+    }).catch((err) => {
+      result = {}
+      console.error(err, 'errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+    })
+    return result
   }
 }
