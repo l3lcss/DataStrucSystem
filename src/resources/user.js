@@ -122,28 +122,29 @@ export default {
       return transaction.get(taRef).then(async (taDoc) => {
         let taData = taDoc.data()
         const index = taData.schedules.findIndex(obj => obj.time === params.time)
-        if (taData.schedules[index].ID) {
-          return Promise.reject(new Error('has student ID'))
-        }
 
         const stdRef = db.collection('member').doc(userLogin.ID.toString())
         if (params.status) {
-          await stdRef.update({
-            schedule: {
+          if (taData.schedules[index].ID) {
+            return Promise.reject(new Error('has student ID'))
+          } else {
+            await stdRef.update({
+              schedule: {
+                TA: params.TA,
+                time: params.time
+              }
+            })
+            taData.schedules[index] = {
+              ID: userLogin.ID,
+              name: userLogin.name,
+              time: params.time
+            }
+
+            await transaction.update(taRef, {schedules: taData.schedules})
+            result = {
               TA: params.TA,
               time: params.time
             }
-          })
-          taData.schedules[index] = {
-            ID: userLogin.ID,
-            name: userLogin.name,
-            time: params.time
-          }
-
-          await transaction.update(taRef, {schedules: taData.schedules})
-          result = {
-            TA: params.TA,
-            time: params.time
           }
         } else {
           taData.schedules[index] = {
