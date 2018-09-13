@@ -28,7 +28,7 @@
                     </b-radio-button>
                   </b-field>
                 </td>
-                <td v-else-if="getUserLogin.schedule.time !== schedule.time && getUserLogin.schedule.TA !== ''">
+                <td v-else-if="getUserLogin.schedule.time !== schedule.time && (getUserLogin.schedule.TA !== '' && getUserLogin.schedule.TA)">
                   <b-field>
                     <b-radio-button
                       disabled
@@ -50,7 +50,7 @@
                   </b-field>
                 </td>
                 <!-- <td v-else-if="getUserLogin.schedule.time === schedule.time && (getUserLogin.schedule.TA === '666'  || getUserLogin.schedule.TA === '' || getUserLogin.schedule)"> -->
-                <td v-else-if="getUserLogin.schedule.TA === '' || getUserLogin.schedule.TA === '666'">
+                <td v-else-if="!getUserLogin.schedule.TA || getUserLogin.schedule.TA === '666'">
                   <b-field>
                     <b-radio-button
                       v-model="schedule.nativeValue"

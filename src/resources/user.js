@@ -117,17 +117,19 @@ export default {
   },
   async setReservTime (params, userLogin) {
     const taRef = db.collection('member').doc(params.TA)
-    let result = {}
-    await db.runTransaction((transaction) => {
+    return db.runTransaction(async (transaction) => {
+      console.log('runTransaction')
       return transaction.get(taRef).then(async (taDoc) => {
-        let taData = taDoc.data()
-        const index = taData.schedules.findIndex(obj => obj.time === params.time)
+        let taData = await taDoc.data()
+        const index = await taData.schedules.findIndex(obj => obj.time === params.time)
 
         const stdRef = db.collection('member').doc(userLogin.ID.toString())
         if (params.status) {
           if (taData.schedules[index].ID) {
-            return Promise.reject(new Error('has student ID'))
+            console.log(`Promise.reject(new Error('has student ID'))`)
+            return Promise.reject(new Error())
           } else {
+            console.log('elseeeeeeeeeeeee')
             await stdRef.update({
               schedule: {
                 TA: params.TA,
@@ -141,7 +143,7 @@ export default {
             }
 
             await transaction.update(taRef, {schedules: taData.schedules})
-            result = {
+            return {
               TA: params.TA,
               time: params.time
             }
@@ -157,18 +159,24 @@ export default {
               time: ''
             }
           })
-          result = {
+          return {
             TA: '',
             time: ''
           }
         }
       })
-    }).then(() => {
-      console.log('transaction successful ')
-    }).catch((err) => {
-      result = {}
-      console.error(err, 'errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+    }).then((res) => {
+      console.log(res, 'transaction successful ')
+      return res
+    }).catch((result) => {
+      db.collection('member').doc(userLogin.ID.toString()).update({
+        schedule: {
+          TA: '',
+          time: ''
+        }
+      })
+      console.error(result, 'errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+      return false
     })
-    return result
   }
 }
