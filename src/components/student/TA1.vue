@@ -28,28 +28,7 @@
                     </b-radio-button>
                   </b-field>
                 </td>
-                <td v-else-if="getUserLogin.schedule.TA === '666' && getUserLogin.schedule.time === schedule.time || getUserLogin.schedule.TA === '' || getUserLogin.schedule">
-                  <b-field>
-                    <b-radio-button
-                      v-model="schedule.nativeValue"
-                      :native-value="true"
-                      type="is-success"
-                      @input="reservEventYes(schedule.time)">
-                      <b-icon icon="check"></b-icon>
-                      <span>Yes</span>
-                    </b-radio-button>
-
-                    <b-radio-button
-                      v-model="schedule.nativeValue"
-                      :native-value="false"
-                      type="is-danger"
-                      @input="reservEventNo(schedule.time)">
-                      <b-icon icon="close"></b-icon>
-                      <span>No</span>
-                    </b-radio-button>
-                  </b-field>
-                </td>
-                <td v-else>
+                <td v-else-if="getUserLogin.schedule.time !== schedule.time && getUserLogin.schedule.TA !== ''">
                   <b-field>
                     <b-radio-button
                       disabled
@@ -65,6 +44,28 @@
                       v-model="schedule.nativeValue"
                       :native-value="false"
                       type="is-danger">
+                      <b-icon icon="close"></b-icon>
+                      <span>No</span>
+                    </b-radio-button>
+                  </b-field>
+                </td>
+                <!-- <td v-else-if="getUserLogin.schedule.time === schedule.time && (getUserLogin.schedule.TA === '666'  || getUserLogin.schedule.TA === '' || getUserLogin.schedule)"> -->
+                <td v-else-if="getUserLogin.schedule.TA === '' || getUserLogin.schedule.TA === '666'">
+                  <b-field>
+                    <b-radio-button
+                      v-model="schedule.nativeValue"
+                      :native-value="true"
+                      type="is-success"
+                      @input="reservEventYes(schedule.time)">
+                      <b-icon icon="check"></b-icon>
+                      <span>Yes</span>
+                    </b-radio-button>
+
+                    <b-radio-button
+                      v-model="schedule.nativeValue"
+                      :native-value="false"
+                      type="is-danger"
+                      @input="reservEventNo(schedule.time)">
                       <b-icon icon="close"></b-icon>
                       <span>No</span>
                     </b-radio-button>
