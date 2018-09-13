@@ -38,6 +38,8 @@ const actions = {
     console.log(newSchedule, 'newSchedule')
     commit('SET_NEW_SCHEDULE', newSchedule)
     if (newSchedule) {
+      return true
+    } else {
       return false
     }
   }
