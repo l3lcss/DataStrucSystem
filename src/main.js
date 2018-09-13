@@ -8,9 +8,7 @@ import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
 import store from './store'
 import VueCarousel from 'vue-carousel'
-import Firestore from 'vue-firestore'
 
-Vue.use(Firestore)
 Vue.use(VueCarousel)
 Vue.use(Buefy)
 Vue.use(VueMouseParallax)
